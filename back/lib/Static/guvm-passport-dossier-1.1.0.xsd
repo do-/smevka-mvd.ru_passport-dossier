@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:guvm="urn://mvd/guvm/basic-types/1.1.0"
+            xmlns:pvc="urn://mvd/guvm/passport-validity-commons/1.1.0"
+            xmlns="urn://mvd/guvm/passport-dossier/1.1.0"
+            targetNamespace="urn://mvd/guvm/passport-dossier/1.1.0"
+            elementFormDefault="qualified">
+    <xsd:import namespace="urn://mvd/guvm/basic-types/1.1.0"
+                schemaLocation="commons/guvm-basic-types-1.1.0.xsd"/>
+    <xsd:import namespace="urn://mvd/guvm/passport-validity-commons/1.1.0"
+                schemaLocation="commons/guvm-passport-validity-commons-1.1.0.xsd"/>
+
+    <xsd:element name="passportDossierRequest">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="ru">
+                Запрос вида сведений &quot;Сведения о паспортах гражданина РФ&quot;
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:choice>
+                <xsd:element name="person" type="guvm:PersonInfo">
+                    <xsd:annotation>
+                        <xsd:documentation xml:lang="ru">Данные физлица</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="passport" type="guvm:RussianPassportBase">
+                    <xsd:annotation>
+                        <xsd:documentation xml:lang="ru">Данные паспорта гражданина РФ</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:element>
+            </xsd:choice>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="passportDossierResponse">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="ru">
+                Ответ на запрос вида сведений &quot;Сведения о паспортах гражданина РФ&quot;
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="person" type="ResponsePerson">
+                    <xsd:annotation>
+                        <xsd:documentation xml:lang="ru">Данные физлица</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="passportDossier" type="PassportDossier" maxOccurs="unbounded">
+                    <xsd:annotation>
+                        <xsd:documentation xml:lang="ru">Сведения о паспортах гражданина РФ</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="ResponsePerson">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="ru">Данные физлица в ответе</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="guvm:PersonInfoBase">
+                <xsd:sequence>
+                    <xsd:element name="birthDate" type="xsd:date" minOccurs="0">
+                        <xsd:annotation>
+                            <xsd:documentation xml:lang="ru">Дата рождения</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="gender" type="guvm:Gender" minOccurs="0">
+                        <xsd:annotation>
+                            <xsd:documentation xml:lang="ru">Пол</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="PassportDossier">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="ru">Сведения о паспортах гражданина РФ</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="person" type="PassportDossierPerson">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="ru">Данные физлица, которому выдан паспорт</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="passport" type="PassportDossierPassport">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="ru">Данные паспорта гражданина РФ</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="comment" type="xsd:string" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="ru">Дополнительная информация</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="PassportDossierPerson">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="ru">Данные физлица, которому выдан паспорт</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="guvm:PersonInfoBase">
+                <xsd:sequence>
+                    <xsd:element name="gender" type="guvm:Gender" minOccurs="0">
+                        <xsd:annotation>
+                            <xsd:documentation xml:lang="ru">Пол</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="PassportDossierPassport">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="ru">Данные паспорта гражданина РФ</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="guvm:RussianPassportBase">
+                <xsd:sequence>
+                    <xsd:element name="issuerCode" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:documentation xml:lang="ru">Код подразделения</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="issuerName" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:documentation xml:lang="ru">Наименование подразделения</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="issueDate" type="xsd:date">
+                        <xsd:annotation>
+                            <xsd:documentation xml:lang="ru">Дата выдачи паспорта</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:choice>
+                        <xsd:element name="validDoc" type="pvc:ValidDocInfo">
+                            <xsd:annotation>
+                                <xsd:documentation xml:lang="ru">Паспорт действителен</xsd:documentation>
+                            </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element name="invalidDoc" type="pvc:InvalidDocInfo">
+                            <xsd:annotation>
+                                <xsd:documentation xml:lang="ru">Паспорт недействителен</xsd:documentation>
+                            </xsd:annotation>
+                        </xsd:element>
+                    </xsd:choice>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+</xsd:schema>
